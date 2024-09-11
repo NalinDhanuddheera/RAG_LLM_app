@@ -1,10 +1,15 @@
-from llama_index import Document, SimpleIndex
+from llama_index.core import VectorStoreIndex
+from llama_index.llms.openai import OpenAI
 from pypdf import PdfReader
 import os
 
 def index_pdfs(pdf_folder_path: str):
-    index = SimpleIndex()
+    # Initialize the OpenAI LLM
+    openai_llm = OpenAI()  # Assuming OpenAI is being used as the LLM
     
+    # Initialize the vector store index
+    index = VectorStoreIndex()
+
     # Loop through all PDF files in the folder
     for file_name in os.listdir(pdf_folder_path):
         if file_name.endswith('.pdf'):
@@ -15,9 +20,14 @@ def index_pdfs(pdf_folder_path: str):
                 text = ""
                 for page in pdf.pages:
                     text += page.extract_text()
-                
-                # Index the document
-                doc = Document(text=text, metadata={"source": file_name})
+
+                # Create a document
+                doc = {
+                    'text': text,
+                    'metadata': {"source": file_name}
+                }
+
+                # Add document to index
                 index.add_document(doc)
 
     return index

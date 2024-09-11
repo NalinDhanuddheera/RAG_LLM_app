@@ -1,11 +1,11 @@
-from llama_index import SimpleIndex
-from openai import OpenAI
+from llama_index.core import VectorStoreIndex
+from llama_index.llms.openai import OpenAI
 from config import OPENAI_API_KEY
 
 # Initialize OpenAI client
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
-def query_index(index: SimpleIndex, query: str):
+def query_index(index: VectorStoreIndex, query: str):
     # Perform the query on the index
     results = index.query(query)
     
